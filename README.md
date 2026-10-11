@@ -12,10 +12,20 @@ vocabulary.
 
 <p align="center"><img src="docs/demo-phone.png" alt="Factory.html on a phone: the win condition, a treemap of the codebase coloured by automation tier, and the current bottleneck" width="360"></p>
 
-## Trend up, never sledgehammer
+## Two modes
+
+Pick one on the first run. It is one line in `.refactory/config.md`, and you can change it later.
+
+- **Normal** (default): for a codebase you or your team own and can ship any day. Kept upgrades ship when their
+  checks pass. Structural changes need your go-ahead.
+- **Enterprise:** trend up, never sledgehammer. For large, shared codebases where a change can reach many teams and
+  ships only on a release process, usually with a business reason.
+
+### Enterprise mode: trend up, never sledgehammer
 
 In a big codebase a rewrite is the riskiest move there is, and a cleanup with no business reason may never ship.
-So Refactory never rewrites. It improves the code in small changes that each ship safely on their own:
+So in enterprise mode Refactory never rewrites. It improves the code in small changes that each ship safely on their
+own:
 
 - **Ratchets:** checks that stop a number (lint errors, untyped files, slow queries) from getting worse, and let it
   fall over time. No behaviour change, so they ship any day.
@@ -23,6 +33,7 @@ So Refactory never rewrites. It improves the code in small changes that each shi
   its own reviewable change.
 - **Parallel change:** expand, migrate, contract. Structure moves in steps that can stop halfway without harm.
 - **Trends:** the report shows a few numbers per area over time. Success is the trend, not the size of a change.
+  Normal mode tracks trends too.
 
 The agent never merges, releases or turns on a flag. When a big change really is needed, it writes the case for the
 people who own the decision, not the change.

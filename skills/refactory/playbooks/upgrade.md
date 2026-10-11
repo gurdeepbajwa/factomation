@@ -2,15 +2,16 @@
 
 Raise an area's automation tier, or fix an issue inside an area at the tier it allows.
 
-Read [../references/trend-up.md](../references/trend-up.md) first. Every upgrade is small and moves a trend the
-right way. None of them is a rewrite.
+Every upgrade is small and moves a trend the right way. In `enterprise` mode, read
+[../references/trend-up.md](../references/trend-up.md) first; none of its upgrades is a rewrite.
 
 ## Pick the upgrade
 
 1. Work on the current bottleneck. If the bottleneck's area is below the tier the fix needs, the upgrade is to
    raise that tier first.
 2. Prefer the cheapest fix that removes the limit (a query, an index, a cache, a config) over a structural change.
-3. Decide how it ships:
+3. Decide how it ships. In `normal` mode, a kept change ships when its checks pass; a structural change needs the
+   user's go-ahead first. In `enterprise` mode, class it:
    - **Anytime:** no behaviour change (tests, ratchets, types, telemetry, docs). It can ship on its own through the
      normal process.
    - **Ride-along:** it changes behaviour or structure. Prepare it, then add it to `ridealongs.md` with its area,
@@ -34,7 +35,7 @@ When a tier goes up, update `areas.tsv` and log it as a `tier` entry.
 
 ## Ride along with business work
 
-When the user mentions upcoming work in an area (a feature, a fix, a migration), or a branch touches an area:
+In `enterprise` mode, when the user mentions upcoming work in an area (a feature, a fix, a migration), or a branch touches an area:
 
 1. Read the area's items in `ridealongs.md`.
 2. Offer the items that fit the work: a preparatory refactor that makes the feature easier, or one small related

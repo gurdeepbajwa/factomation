@@ -1,4 +1,6 @@
-# Trend up, never sledgehammer
+# Enterprise mode: trend up, never sledgehammer
+
+This applies when `config.md` sets `mode: enterprise`. Ratchets and trend lines help in `normal` mode too.
 
 Refactory is built for large, shared codebases where a change can reach many teams and users, and where code ships
 on a release process, usually with a business reason such as a feature. In that world a rewrite is the most

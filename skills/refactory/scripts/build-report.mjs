@@ -318,6 +318,7 @@ const meta = [
   r.commit && `Map at ${esc(r.commit)}`,
   r.date && esc(r.date),
   r.session && `session ${esc(r.session)}`,
+  r.mode && `${esc(r.mode)} mode`,
 ]
   .filter(Boolean)
   .join(" · ");

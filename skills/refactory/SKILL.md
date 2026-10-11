@@ -13,19 +13,21 @@ bit, upgrade, explore further. Full coverage never comes first.
 This is engineering work. Do not add points, badges or game talk to anything you write. The factory words below are
 the shared vocabulary, nothing more.
 
-## Trend up, never sledgehammer
+## Modes
 
-Refactory is built for large codebases where a change can reach many teams and users, and where code ships through
-a release process, usually with a business reason. So it never rewrites. It improves the codebase in small steps
-that each ship safely on their own and never let things get worse:
+`config.md` sets the mode. The explore playbook asks for it on the first session. If it is missing, use `normal`.
 
-- **Ratchets** stop a number from getting worse and let it improve over time, with no behaviour change.
-- **Ride-alongs** are small improvements prepared ahead and shipped with the feature work that touches the same
-  area.
-- **Parallel changes** (expand, migrate, contract; strangler; flags) move structure without a big switch.
-- **Trends** show progress: the report tracks a few numbers per area over time.
+- **`normal`:** for a codebase one person or one team owns and can ship any day. A kept upgrade ships when its
+  checks pass. A structural change (one that moves code across files or changes an interface) needs the user's
+  go-ahead, and goes in steps where it can.
+- **`enterprise`:** trend up, never sledgehammer. For large codebases where a change can reach many teams and users,
+  and where code ships through a release process, usually with a business reason. It never rewrites. It improves the
+  code in small steps that each ship safely on their own and never let things get worse: **ratchets** stop a number
+  from getting worse, **ride-alongs** ship prepared improvements with the feature work in the same area, and
+  **parallel changes** move structure without a big switch. Read
+  [references/trend-up.md](references/trend-up.md) before any upgrade.
 
-Read [references/trend-up.md](references/trend-up.md) before any upgrade.
+Both modes measure **trends**: the report tracks a few numbers per area over time. Ratchets are useful in both.
 
 ## Vocabulary
 
@@ -95,11 +97,13 @@ Do not read `Factory.html` in a normal session. Read it only in the report playb
 - **The tier gates the change.** Never change code in an area beyond what its tier allows. Data, migrations, auth,
   payments, external APIs and anything without a reversible check always need the user's go-ahead, whatever the
   tier.
-- **Trend up.** No rewrites, no unrelated cleanups, no big-bang upgrades. Each change is small, reviewable, safe on
-  its own, and follows the change process in `config.md`. When a big change is truly needed, make the case in the
-  report; do not make the change.
+- **Small steps.** No unrelated cleanups or reformatting in either mode. In `normal` mode a rewrite of an area needs
+  the user's go-ahead and its behaviour pinned by tests first. In `enterprise` mode there are no rewrites and no
+  big-bang upgrades: each change is small, reviewable, safe on its own, and follows the change process in
+  `config.md`. When a big change is truly needed, make the case in the report; do not make the change.
 - **One change, one check, keep or revert, one commit.** Never batch upgrades.
-- **People ship.** Never merge, release or turn on a flag. Prepare the change and hand it over.
+- **People ship.** Merge, release or turn on a flag only when the user asks, in `normal` mode. Never in `enterprise`
+  mode: prepare the change and hand it over.
 - **Stop the line.** When a check fails, stop and find out why before you do anything else. Log the cause.
 - **The bottleneck first.** Improving anything that is not the current bottleneck is waste. After an upgrade, check
   whether the bottleneck moved.

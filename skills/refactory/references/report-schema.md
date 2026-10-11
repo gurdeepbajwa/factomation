@@ -11,6 +11,7 @@ example.
   "commit": "short sha the map was built at",
   "date": "12 Oct 2026",
   "session": 9,
+  "mode": "normal | enterprise",
   "summary": "two sentences: where things stand",
   "win": {
     "rocket": "the win condition from config.md",

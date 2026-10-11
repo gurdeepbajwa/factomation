@@ -10,9 +10,11 @@ Map the codebase: first broad and shallow, then deeper where it matters.
    payments and the API reach assembler tier, and month-end runs in under 10 minutes". Write it in `config.md`.
 3. Read the project's own agent files (AGENTS.md, CLAUDE.md, CONTRIBUTING) and copy the rules that apply into
    `config.md`: how to run tests and heavy commands, what needs a human, what never to touch.
-4. Ask about the change process and write it in `config.md`: how changes reach production, release trains or
-   windows, freezes, who approves what, code owners, and the size of change reviewers accept. Ask what business
-   work is planned in the next few months, and in which areas: those are the vehicles for ride-alongs.
+4. Ask for the mode and write it in `config.md`. Offer `enterprise` when the codebase is shared by many teams,
+   ships on a release process, or changes need a business reason; otherwise `normal`. In `enterprise` mode, also ask
+   about the change process (how changes reach production, release trains or windows, freezes, who approves what,
+   code owners, the size of change reviewers accept) and the business work planned in each area for the next few
+   months: those are the vehicles for ride-alongs.
 5. Ask whether `.refactory/` is committed (shared with the team) or ignored (private). Default: commit it, but
    never commit secrets or customer data into it.
 

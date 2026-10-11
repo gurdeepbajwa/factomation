@@ -4,6 +4,7 @@
   "commit": "a41c9e2",
   "date": "12 Oct 2026",
   "session": 9,
+  "mode": "enterprise",
   "summary": "Invoices and the API are mapped and guarded by checks. The current bottleneck is PDF rendering. Reports and the old admin are still in the fog.",
   "win": {
     "rocket": "Invoices, payments and the API reach **assembler** tier, and month-end runs in under 10 minutes.",
