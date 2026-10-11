@@ -3,13 +3,29 @@
 **Refactor a codebase like a factory: map it, understand it and automate it, one area at a time.**
 
 Refactory (refactor + factory) is an agent skill for Claude Code, Codex, Cursor and other hosts that read `SKILL.md` files. It is built
-for legacy codebases, where nobody left knows why things are the way they are.
+for large and legacy codebases, where nobody left knows why things are the way they are, and where a change
+can reach many teams and has to wait for a release.
 
 It borrows the loop from factory games: explore a bit, build a bit, upgrade, explore further. You never map
 everything before you start improving things. The work is real engineering: the factory words are just a shared
 vocabulary.
 
 <p align="center"><img src="docs/demo-phone.png" alt="Factory.html on a phone: the win condition, a treemap of the codebase coloured by automation tier, and the current bottleneck" width="360"></p>
+
+## Trend up, never sledgehammer
+
+In a big codebase a rewrite is the riskiest move there is, and a cleanup with no business reason may never ship.
+So Refactory never rewrites. It improves the code in small changes that each ship safely on their own:
+
+- **Ratchets:** checks that stop a number (lint errors, untyped files, slow queries) from getting worse, and let it
+  fall over time. No behaviour change, so they ship any day.
+- **Ride-alongs:** improvements prepared ahead and shipped with the feature work that touches the same area, each as
+  its own reviewable change.
+- **Parallel change:** expand, migrate, contract. Structure moves in steps that can stop halfway without harm.
+- **Trends:** the report shows a few numbers per area over time. Success is the trend, not the size of a change.
+
+The agent never merges, releases or turns on a flag. When a big change really is needed, it writes the case for the
+people who own the decision, not the change.
 
 ## How it works
 
@@ -36,7 +52,8 @@ vocabulary.
    code, types, lint or tests where possible. Lessons that apply to every codebase are proposed back to this repo,
    only with your approval.
 6. **Read one page.** The agents keep their own notes in whatever shape works for them. You read one page,
-   `Factory.html`: the map, the bottleneck, three questions for you, recommended hill climbs, findings and upgrades.
+   `Factory.html`: the map, the bottleneck, three questions for you, recommended hill climbs, trends, ride-alongs,
+   findings and upgrades.
    It is built for a phone. See the [live demo](https://gurdeepbajwa.github.io/refactory/examples/demo/Factory.html).
 
 The win condition, the **rocket**, is yours to set: for example "invoices, payments and the API reach assembler
@@ -83,9 +100,9 @@ On the first run it creates `.refactory/` at the repo root and asks for your win
 skills/refactory/
   SKILL.md          entry point: vocabulary, the session loop, the rules
   playbooks/        explore · questions · upgrade · report · reflect
-  references/       tiers, evidence rules, the .refactory/ layout, report.json schema
+  references/       trend-up, tiers, evidence rules, the .refactory/ layout, report.json schema
   scripts/          hotspots.sh, areas.sh, build-report.mjs, check-report.mjs
-  templates/        config.md, log.md, areas.tsv, hillclimb.md
+  templates/        config.md, log.md, areas.tsv, trends.tsv, ridealongs.md, hillclimb.md
 skills/hillclimb/
   SKILL.md          the keep-or-revert loop for one metric
   references/       benchmark checklist
@@ -113,6 +130,8 @@ Ideas borrowed, with thanks:
 - [pstack](https://github.com/cursor/plugins/tree/main/pstack) by poteto: the hill climb and benchmark discipline.
 - [diagram-design](https://github.com/cathrynlavery/diagram-design): self-contained HTML and SVG, deletion first.
 - [ASD-STE100 skill](https://github.com/danyuchn/asd-ste100-skill): plain, unambiguous writing for agent notes.
+- Martin Fowler, preparatory refactoring ("make the change easy, then make the easy change") and the strangler fig;
+  Danilo Sato, parallel change (expand, migrate, contract).
 - Factorio and Minecraft, for the loop.
 
 ## License

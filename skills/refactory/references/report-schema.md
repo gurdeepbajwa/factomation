@@ -62,6 +62,27 @@ example.
       "note": "",
     },
   ],
+  "trends": [
+    {
+      "metric": "lint violations in invoices",
+      "area": "invoices",
+      "unit": "",
+      "lowerIsBetter": true,
+      "target": 0,
+      "points": [{ "label": "S3", "value": 212 }], // oldest first, 2–12 points
+    },
+  ],
+  "ridealongs": [
+    {
+      "area": "",
+      "title": "",
+      "size": "~120 lines",
+      "status": "ready | drafted | waiting",
+      "improves": "",
+      "vehicle": "the business work it ships with",
+      "evidence": "",
+    },
+  ],
   "stories": [{ "title": "", "body": "why it is like this", "source": "" }],
   "hotspots": [{ "path": "", "lines": 0, "changes": 0 }], // top 5 from scripts/hotspots.sh
 }

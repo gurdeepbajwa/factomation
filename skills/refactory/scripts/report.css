@@ -417,6 +417,80 @@ p {
   font: 12px var(--mono);
   color: var(--muted);
 }
+.trend .now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin-bottom: 6px;
+}
+.trend .now b {
+  font: 600 26px/1.1 var(--serif);
+}
+.trend .now span {
+  font: 12px var(--mono);
+  color: var(--muted);
+}
+.trend svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.trend .line {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.trend .dot {
+  fill: var(--muted);
+}
+.trend.up .line {
+  stroke: var(--t3);
+}
+.trend.up .dot {
+  fill: var(--t3);
+}
+.trend.down .line {
+  stroke: var(--bad);
+}
+.trend.down .dot {
+  fill: var(--bad);
+}
+.trend .goal {
+  stroke: var(--faint);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+.trend .axis {
+  display: flex;
+  justify-content: space-between;
+  font: 11px var(--mono);
+  color: var(--faint);
+}
+.ride dl {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 4px 10px;
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+.ride dt {
+  font: 12px/1.6 var(--mono);
+  color: var(--muted);
+}
+.ride dd {
+  margin: 0;
+}
+.tag.s-ready {
+  background: var(--t3);
+  color: #10140d;
+}
+.tag.s-drafted {
+  background: var(--t2);
+  color: #0e1520;
+}
 .tl .what {
   font-weight: 600;
   margin: 2px 0 4px;

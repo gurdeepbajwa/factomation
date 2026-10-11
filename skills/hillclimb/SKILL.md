@@ -55,6 +55,10 @@ Read the log before each attempt. Then, one hypothesis per attempt:
 
 Correctness and simplicity outrank the number. Revert a win that makes the code much harder to follow, and log why.
 
+Climb in small steps. Each kept change must be small enough to review and ship on its own, and must follow the
+project's change process (`config.md` with refactory, or the repo's contributing rules). Never rewrite a module to
+move the number. If the next step can only be a big change, stop and write it up as a proposal instead.
+
 ## 4. Plateaus and stopping
 
 - After three reverts in a row, change approach: re-read the code, profile again, combine two near misses, or try
@@ -68,5 +72,8 @@ Correctness and simplicity outrank the number. Revert a win that makes the code 
 - Update the spec: status, final value, date and commit.
 - With refactory: append one `upgrade` entry per kept change to `.refactory/log.md`, and a `session` entry with
   the result. The next report build shows them.
+- The kept changes are ready for review, not shipped. Never merge, release or turn on a flag. If a kept change
+  changes behaviour and the project ships those only with business work, add it to `.refactory/ridealongs.md` with
+  its vehicle and say it is waiting for one.
 - Reply with: metric and target, baseline → final with the percent change, attempts (kept and reverted), one line
   per kept change, the log path, and the next idea you would try.

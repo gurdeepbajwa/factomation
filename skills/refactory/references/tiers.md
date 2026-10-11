@@ -18,6 +18,10 @@ make that safe. It falls when those checks go away or the area goes stale.
 - Some changes always need the user, at any tier: data and migrations, auth and permissions, payments, external
   APIs and anything you cannot revert with a check.
 - The project's own rules can lower any of this. They never raise it.
+- Blast radius lowers it too. In an area many teams or services depend on, treat the tier as one lower for any
+  change that reaches those dependents.
+- Raising a tier rarely needs a big change. Most tiers rise through ratchets: checks that stop new problems and let
+  the old count fall over time. See [trend-up.md](trend-up.md).
 
 ## Why tiers
 

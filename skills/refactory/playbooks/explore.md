@@ -4,12 +4,16 @@ Map the codebase: first broad and shallow, then deeper where it matters.
 
 ## Setup (first session only)
 
-1. Create `.refactory/` from `templates/`: `config.md`, `log.md`, `areas.tsv`, and an empty `notes/`.
+1. Create `.refactory/` from `templates/`: `config.md`, `log.md`, `areas.tsv`, `trends.tsv`,
+   `ridealongs.md`, and an empty `notes/`.
 2. Ask the user for the rocket (the win condition) and the scope. Offer a concrete draft, for example "invoices,
    payments and the API reach assembler tier, and month-end runs in under 10 minutes". Write it in `config.md`.
 3. Read the project's own agent files (AGENTS.md, CLAUDE.md, CONTRIBUTING) and copy the rules that apply into
    `config.md`: how to run tests and heavy commands, what needs a human, what never to touch.
-4. Ask whether `.refactory/` is committed (shared with the team) or ignored (private). Default: commit it, but
+4. Ask about the change process and write it in `config.md`: how changes reach production, release trains or
+   windows, freezes, who approves what, code owners, and the size of change reviewers accept. Ask what business
+   work is planned in the next few months, and in which areas: those are the vehicles for ride-alongs.
+5. Ask whether `.refactory/` is committed (shared with the team) or ignored (private). Default: commit it, but
    never commit secrets or customer data into it.
 
 ## First pass: landmarks
@@ -21,7 +25,8 @@ Aim for a rough map of the whole codebase in one session. Do not read deeply yet
    group per area for the map (for example `apps`, `packages`, `jobs`).
 3. Write `areas.tsv`: every area at tier 0, confidence `unknown`, `verified_at` `-`.
 4. Run `scripts/hotspots.sh` and `scripts/areas.sh`. Hotspots (big files that change often) hold most of the risk.
-5. For each area, write one note: what it is for, its entry points, what it depends on, and its landmarks (the 3–5
+5. Choose 1–3 trend numbers per area that matter to the rocket, and record today's values in `trends.tsv`.
+6. For each area, write one note: what it is for, its entry points, what it depends on, and its landmarks (the 3–5
    files everyone must know). Set confidence to `sketched`.
 
 ## Later passes: routes and the survey

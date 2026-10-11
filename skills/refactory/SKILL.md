@@ -13,6 +13,20 @@ bit, upgrade, explore further. Full coverage never comes first.
 This is engineering work. Do not add points, badges or game talk to anything you write. The factory words below are
 the shared vocabulary, nothing more.
 
+## Trend up, never sledgehammer
+
+Refactory is built for large codebases where a change can reach many teams and users, and where code ships through
+a release process, usually with a business reason. So it never rewrites. It improves the codebase in small steps
+that each ship safely on their own and never let things get worse:
+
+- **Ratchets** stop a number from getting worse and let it improve over time, with no behaviour change.
+- **Ride-alongs** are small improvements prepared ahead and shipped with the feature work that touches the same
+  area.
+- **Parallel changes** (expand, migrate, contract; strangler; flags) move structure without a big switch.
+- **Trends** show progress: the report tracks a few numbers per area over time.
+
+Read [references/trend-up.md](references/trend-up.md) before any upgrade.
+
 ## Vocabulary
 
 - **Area:** a part of the codebase you map and upgrade as a unit (an app, a package, a service, a job).
@@ -29,6 +43,8 @@ the shared vocabulary, nothing more.
 - **Upgrade:** raise an area's tier (add the missing tests, checks or budgets), or fix an issue inside an area at
   the tier it allows.
 - **Bottleneck:** the one thing that most limits the codebase right now. Work on it before anything else.
+- **Ratchet:** a check that fails when a number gets worse and lets it improve. The usual way to raise a tier.
+- **Ride-along:** an improvement prepared ahead, waiting to ship with business work in its area (its vehicle).
 - **Hill climb:** a measured, repeated improvement of one metric. Hand it to the `hillclimb` skill.
 - **Rocket:** the win condition the user sets. "The whole codebase" is not a win condition.
 
@@ -37,15 +53,17 @@ the shared vocabulary, nothing more.
 Each codebase keeps its state in `.refactory/` at the repo root. See
 [references/instance.md](references/instance.md). Create it from [templates/](templates/) on the first session.
 
-| File                 | Who reads it               | Format                                                     |
-| -------------------- | -------------------------- | ---------------------------------------------------------- |
-| `config.md`          | every session              | the rocket, scope, how to run checks, local rules          |
-| `log.md`             | every session              | append-only memory, fixed format                           |
-| `areas.tsv`          | every session, scripts     | fixed columns, read by `scripts/areas.sh`                  |
-| `notes/`             | you                        | free: organise it however works best                       |
-| `hillclimbs/<id>.md` | `hillclimb` skill          | one spec per recommended climb                             |
-| `report.json`        | `scripts/build-report.mjs` | [references/report-schema.md](references/report-schema.md) |
-| `Factory.html`       | the user only              | built from `report.json`, never edited by hand             |
+| File                 | Who reads it                 | Format                                                     |
+| -------------------- | ---------------------------- | ---------------------------------------------------------- |
+| `config.md`          | every session                | the rocket, scope, how to run checks, local rules          |
+| `log.md`             | every session                | append-only memory, fixed format                           |
+| `areas.tsv`          | every session, scripts       | fixed columns, read by `scripts/areas.sh`                  |
+| `trends.tsv`         | upgrade and report playbooks | one row per measurement: date, commit, area, metric, value |
+| `ridealongs.md`      | upgrade and report playbooks | the queue of improvements waiting for a vehicle            |
+| `notes/`             | you                          | free: organise it however works best                       |
+| `hillclimbs/<id>.md` | `hillclimb` skill            | one spec per recommended climb                             |
+| `report.json`        | `scripts/build-report.mjs`   | [references/report-schema.md](references/report-schema.md) |
+| `Factory.html`       | the user only                | built from `report.json`, never edited by hand             |
 
 Do not read `Factory.html` in a normal session. Read it only in the report playbook.
 
@@ -77,7 +95,11 @@ Do not read `Factory.html` in a normal session. Read it only in the report playb
 - **The tier gates the change.** Never change code in an area beyond what its tier allows. Data, migrations, auth,
   payments, external APIs and anything without a reversible check always need the user's go-ahead, whatever the
   tier.
+- **Trend up.** No rewrites, no unrelated cleanups, no big-bang upgrades. Each change is small, reviewable, safe on
+  its own, and follows the change process in `config.md`. When a big change is truly needed, make the case in the
+  report; do not make the change.
 - **One change, one check, keep or revert, one commit.** Never batch upgrades.
+- **People ship.** Never merge, release or turn on a flag. Prepare the change and hand it over.
 - **Stop the line.** When a check fails, stop and find out why before you do anything else. Log the cause.
 - **The bottleneck first.** Improving anything that is not the current bottleneck is waste. After an upgrade, check
   whether the bottleneck moved.

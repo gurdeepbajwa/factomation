@@ -13,6 +13,8 @@ changed since the last build, or when the user asks.
    - Every finding, bottleneck and story keeps its evidence. Show `unverified` where it applies.
    - `questions`: the three questions from this session's close.
    - `hillclimbs`: one entry per open spec in `.refactory/hillclimbs/`.
+   - `trends`: the numbers from `trends.tsv` that matter to the rocket, oldest first.
+   - `ridealongs`: the open items from `ridealongs.md`.
 3. Build: `node <skill>/scripts/build-report.mjs .refactory/report.json`.
 4. Check: `node <skill>/scripts/check-report.mjs .refactory/Factory.html`. It needs Playwright. Fix every problem
    it lists. If Playwright is not available, say so in your reply.
