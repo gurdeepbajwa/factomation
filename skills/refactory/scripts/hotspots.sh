@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Rank files by size x recent changes. Run from the repo root.
 # Usage: hotspots.sh [days=90] [limit=20]
-# FACTOMATION_EXCLUDE: extended regex of paths to skip. The default skips
+# REFACTORY_EXCLUDE: extended regex of paths to skip. The default skips
 # dependencies, build output, lockfiles, generated and minified files.
 set -eu
 days="${1:-90}"
 limit="${2:-20}"
-exclude="${FACTOMATION_EXCLUDE:-(^|/)(node_modules|vendor|dist|build|out|output|coverage|\.factomation)/|lock(\.json|\.yaml)?$|\.lock$|\.gen\.|\.min\.|\.snap$}"
+exclude="${REFACTORY_EXCLUDE:-(^|/)(node_modules|vendor|dist|build|out|output|coverage|\.refactory)/|lock(\.json|\.yaml)?$|\.lock$|\.gen\.|\.min\.|\.snap$}"
 
 printf 'score\tchanges\tlines\tpath\n'
 git log --since="${days}.days" --format= --name-only |

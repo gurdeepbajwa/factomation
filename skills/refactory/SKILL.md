@@ -1,9 +1,9 @@
 ---
-name: factomation
-description: Turn a codebase into a factory that you map, understand and automate one area at a time. Use when the user wants to explore, map or understand a codebase (often a legacy one), find bottlenecks, raise an area's automation tier, plan upgrades, answer "how does this work" questions about the codebase, or rebuild the Factory.html report. Triggers - "factomation", "factory", "map this codebase", "where are the bottlenecks", "what should we improve next". Keeps a memory per codebase in .factomation/log.md and learns from the user's questions and corrections.
+name: refactory
+description: Turn a codebase into a factory that you map, understand and automate one area at a time. Use when the user wants to explore, map or understand a codebase (often a legacy one), find bottlenecks, raise an area's automation tier, plan upgrades, answer "how does this work" questions about the codebase, or rebuild the Factory.html report. Triggers - "refactory", "factory", "map this codebase", "where are the bottlenecks", "what should we improve next". Keeps a memory per codebase in .refactory/log.md and learns from the user's questions and corrections.
 ---
 
-# Factomation
+# Refactory
 
 A legacy codebase is code whose theory has died: the people who knew why it is the way it is have left, and the
 code alone does not say. Your job is to rebuild that theory, in the user's head and in your notes, and to use it to
@@ -34,7 +34,7 @@ the shared vocabulary, nothing more.
 
 ## The instance folder
 
-Each codebase keeps its state in `.factomation/` at the repo root. See
+Each codebase keeps its state in `.refactory/` at the repo root. See
 [references/instance.md](references/instance.md). Create it from [templates/](templates/) on the first session.
 
 | File                 | Who reads it               | Format                                                     |
@@ -51,7 +51,7 @@ Do not read `Factory.html` in a normal session. Read it only in the report playb
 
 ## Every session
 
-1. **Load.** Read `config.md`, the last 200 lines of `log.md`, and `areas.tsv`. If `.factomation/` is missing, run
+1. **Load.** Read `config.md`, the last 200 lines of `log.md`, and `areas.tsv`. If `.refactory/` is missing, run
    the explore playbook's setup step first.
 2. **Check freshness.** Run `scripts/areas.sh`. Mark every area it reports as `stale` in `areas.tsv`, and log it.
    A stale area drops to `sketched` confidence until you verify it again.

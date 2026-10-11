@@ -1,4 +1,4 @@
-# Factomation config
+# Refactory config
 
 ## Rocket
 
@@ -23,7 +23,7 @@ Note any wrapper the project requires for heavy commands. -->
 
 ## Hotspots
 
-<!-- Extra paths to skip, as an extended regex for FACTOMATION_EXCLUDE. Example: `(^|/)generated/|\.pb\.go$` -->
+<!-- Extra paths to skip, as an extended regex for REFACTORY_EXCLUDE. Example: `(^|/)generated/|\.pb\.go$` -->
 
 ## Needs the user
 

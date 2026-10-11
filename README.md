@@ -1,8 +1,8 @@
-# Factomation
+# Refactory
 
-**Turn a codebase into a factory you map, understand and automate, one area at a time.**
+**Refactor a codebase like a factory: map it, understand it and automate it, one area at a time.**
 
-Factomation is an agent skill for Claude Code, Codex, Cursor and other hosts that read `SKILL.md` files. It is built
+Refactory (refactor + factory) is an agent skill for Claude Code, Codex, Cursor and other hosts that read `SKILL.md` files. It is built
 for legacy codebases, where nobody left knows why things are the way they are.
 
 It borrows the loop from factory games: explore a bit, build a bit, upgrade, explore further. You never map
@@ -32,12 +32,12 @@ vocabulary.
 
 4. **Hill climb.** When a fix needs many measured attempts on one number, the factory recommends a hill climb. You
    start it with `/hillclimb <id>`: one change, one measurement, keep or revert, until it hits the target.
-5. **Learn.** Corrections and feedback go into `.factomation/log.md`. Repeated corrections become rules, enforced in
+5. **Learn.** Corrections and feedback go into `.refactory/log.md`. Repeated corrections become rules, enforced in
    code, types, lint or tests where possible. Lessons that apply to every codebase are proposed back to this repo,
    only with your approval.
 6. **Read one page.** The agents keep their own notes in whatever shape works for them. You read one page,
    `Factory.html`: the map, the bottleneck, three questions for you, recommended hill climbs, findings and upgrades.
-   It is built for a phone. See the [demo](examples/demo/Factory.html) (download it and open it in a browser).
+   It is built for a phone. See the [live demo](https://gurdeepbajwa.github.io/refactory/examples/demo/Factory.html).
 
 The win condition, the **rocket**, is yours to set: for example "invoices, payments and the API reach assembler
 tier, and month-end runs in under 10 minutes".
@@ -45,21 +45,21 @@ tier, and month-end runs in under 10 minutes".
 ## Install
 
 ```bash
-npx skills add gurdeepbajwa/factomation
+npx skills add gurdeepbajwa/refactory
 ```
 
 Or in Claude Code, as a plugin:
 
 ```text
-/plugin marketplace add gurdeepbajwa/factomation
-/plugin install factomation@factomation
+/plugin marketplace add gurdeepbajwa/refactory
+/plugin install refactory@refactory
 ```
 
 Or clone it into your skills folder:
 
 ```bash
-git clone https://github.com/gurdeepbajwa/factomation ~/.agents/factomation
-ln -s ~/.agents/factomation/skills/* ~/.claude/skills/
+git clone https://github.com/gurdeepbajwa/refactory ~/.agents/refactory
+ln -s ~/.agents/refactory/skills/* ~/.claude/skills/
 ```
 
 The report check (`scripts/check-report.mjs`) needs [Playwright](https://playwright.dev). Everything else needs only
@@ -68,22 +68,22 @@ git, bash and Node 18 or newer.
 ## Use
 
 ```text
-/factomation map this codebase
+/refactory map this codebase
 how does an invoice get sent?
-/factomation what should we upgrade next?
-/factomation rebuild the report
+/refactory what should we upgrade next?
+/refactory rebuild the report
 /hillclimb month-end-time
 ```
 
-On the first run it creates `.factomation/` at the repo root and asks for your win condition and scope.
+On the first run it creates `.refactory/` at the repo root and asks for your win condition and scope.
 
 ## What's inside
 
 ```
-skills/factomation/
+skills/refactory/
   SKILL.md          entry point: vocabulary, the session loop, the rules
   playbooks/        explore · questions · upgrade · report · reflect
-  references/       tiers, evidence rules, the .factomation/ layout, report.json schema
+  references/       tiers, evidence rules, the .refactory/ layout, report.json schema
   scripts/          hotspots.sh, areas.sh, build-report.mjs, check-report.mjs
   templates/        config.md, log.md, areas.tsv, hillclimb.md
 skills/hillclimb/
@@ -95,7 +95,7 @@ LEARNINGS.md        lessons merged back from real codebases
 
 ## Privacy
 
-`.factomation/` lives in your repository. Nothing is sent anywhere by this skill. The reflect playbook only ever
+`.refactory/` lives in your repository. Nothing is sent anywhere by this skill. The reflect playbook only ever
 proposes a lesson upstream after it strips project details and you approve the exact text.
 
 ## Credits

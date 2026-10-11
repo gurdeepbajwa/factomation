@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Size, recent changes and freshness for each area in .factomation/areas.tsv.
+# Size, recent changes and freshness for each area in .refactory/areas.tsv.
 # Run from the repo root.
 # Usage: areas.sh [days=90] [areas.tsv]
 # areas.tsv columns (tab separated): area, group, paths, tier, confidence, verified_at
@@ -9,8 +9,8 @@
 # status: fresh | stale | unverified | unknown-commit
 set -eu
 days="${1:-90}"
-file="${2:-.factomation/areas.tsv}"
-exclude="${FACTOMATION_EXCLUDE:-(^|/)(node_modules|vendor|dist|build|out|output|coverage|\.factomation)/|lock(\.json|\.yaml)?$|\.lock$|\.gen\.|\.min\.|\.snap$}"
+file="${2:-.refactory/areas.tsv}"
+exclude="${REFACTORY_EXCLUDE:-(^|/)(node_modules|vendor|dist|build|out|output|coverage|\.refactory)/|lock(\.json|\.yaml)?$|\.lock$|\.gen\.|\.min\.|\.snap$}"
 
 printf 'area\tlines\tcommits\tstatus\tdetail\n'
 while IFS=$'\t' read -r area _group paths _tier _conf commit; do

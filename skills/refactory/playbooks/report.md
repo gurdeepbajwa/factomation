@@ -12,11 +12,11 @@ changed since the last build, or when the user asks.
    - Remove anything stale, reverted or wrong. Do not keep an entry because it was there before.
    - Every finding, bottleneck and story keeps its evidence. Show `unverified` where it applies.
    - `questions`: the three questions from this session's close.
-   - `hillclimbs`: one entry per open spec in `.factomation/hillclimbs/`.
-3. Build: `node <skill>/scripts/build-report.mjs .factomation/report.json`.
-4. Check: `node <skill>/scripts/check-report.mjs .factomation/Factory.html`. It needs Playwright. Fix every problem
+   - `hillclimbs`: one entry per open spec in `.refactory/hillclimbs/`.
+3. Build: `node <skill>/scripts/build-report.mjs .refactory/report.json`.
+4. Check: `node <skill>/scripts/check-report.mjs .refactory/Factory.html`. It needs Playwright. Fix every problem
    it lists. If Playwright is not available, say so in your reply.
 5. Compare the new page with the old one. Every number must trace to a command you ran in this session or to a
    cited file.
-6. Commit `report.json` and `Factory.html` if the project commits `.factomation/`. Send or link the page to the user
+6. Commit `report.json` and `Factory.html` if the project commits `.refactory/`. Send or link the page to the user
    if your environment can.

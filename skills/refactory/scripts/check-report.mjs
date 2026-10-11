@@ -3,7 +3,7 @@
 // Usage: node check-report.mjs [Factory.html] [--shots <dir>]
 // Needs Playwright with Chromium. WebKit is used too when it is installed,
 // because every iPhone browser is WebKit.
-// FACTOMATION_PLAYWRIGHT: path to the playwright or @playwright/test package,
+// REFACTORY_PLAYWRIGHT: path to the playwright or @playwright/test package,
 // when it is not resolvable from the current directory.
 // Exits 1 and lists the problems when a check fails.
 import { createRequire } from "node:module";
@@ -15,12 +15,12 @@ const shotsAt = args.indexOf("--shots");
 const shots = shotsAt >= 0 ? args[shotsAt + 1] : null;
 const file = resolve(
   args.find((a, i) => !a.startsWith("--") && (shotsAt < 0 || i !== shotsAt + 1)) ??
-    ".factomation/Factory.html",
+    ".refactory/Factory.html",
 );
 
 const req = createRequire(resolve(process.cwd(), "noop.js"));
 let pw;
-for (const name of [process.env.FACTOMATION_PLAYWRIGHT, "playwright", "@playwright/test"].filter(
+for (const name of [process.env.REFACTORY_PLAYWRIGHT, "playwright", "@playwright/test"].filter(
   Boolean,
 )) {
   try {
@@ -32,7 +32,7 @@ for (const name of [process.env.FACTOMATION_PLAYWRIGHT, "playwright", "@playwrig
 }
 if (!pw) {
   console.error(
-    "Playwright not found. Install it, or set FACTOMATION_PLAYWRIGHT to its package path.",
+    "Playwright not found. Install it, or set REFACTORY_PLAYWRIGHT to its package path.",
   );
   process.exit(2);
 }

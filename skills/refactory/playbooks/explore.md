@@ -4,12 +4,12 @@ Map the codebase: first broad and shallow, then deeper where it matters.
 
 ## Setup (first session only)
 
-1. Create `.factomation/` from `templates/`: `config.md`, `log.md`, `areas.tsv`, and an empty `notes/`.
+1. Create `.refactory/` from `templates/`: `config.md`, `log.md`, `areas.tsv`, and an empty `notes/`.
 2. Ask the user for the rocket (the win condition) and the scope. Offer a concrete draft, for example "invoices,
    payments and the API reach assembler tier, and month-end runs in under 10 minutes". Write it in `config.md`.
 3. Read the project's own agent files (AGENTS.md, CLAUDE.md, CONTRIBUTING) and copy the rules that apply into
    `config.md`: how to run tests and heavy commands, what needs a human, what never to touch.
-4. Ask whether `.factomation/` is committed (shared with the team) or ignored (private). Default: commit it, but
+4. Ask whether `.refactory/` is committed (shared with the team) or ignored (private). Default: commit it, but
    never commit secrets or customer data into it.
 
 ## First pass: landmarks
@@ -42,7 +42,7 @@ In the chosen area:
   layers), overproduction (work nobody uses), inventory (dead code, unused features), defects (retries, swallowed
   errors), and misleading names.
 - **Record findings** with impact, confidence and how to measure them. A measurable finding with a clear metric is a
-  hill climb candidate: write `.factomation/hillclimbs/<id>.md` from `templates/hillclimb.md`.
+  hill climb candidate: write `.refactory/hillclimbs/<id>.md` from `templates/hillclimb.md`.
 - **Verify.** An area is `verified` when you can answer a question about it from your notes that you did not trace,
   and the code confirms the answer. Set `verified_at` to the current commit.
 

@@ -1,9 +1,9 @@
 {
-  "name": "factomation",
+  "name": "refactory",
   "owner": { "name": "Gurdeep Bajwa" },
   "plugins": [
     {
-      "name": "factomation",
+      "name": "refactory",
       "source": "./",
       "description": "Map, understand and automate a codebase one area at a time, with a keep-or-revert hill climb skill."
     }
