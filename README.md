@@ -37,7 +37,7 @@ vocabulary.
    only with your approval.
 6. **Read one page.** The agents keep their own notes in whatever shape works for them. You read one page,
    `Factory.html`: the map, the bottleneck, three questions for you, recommended hill climbs, findings and upgrades.
-   It is built for a phone. See the [demo](examples/demo/Factory.html) (download it and open it in a browser).
+   It is built for a phone. Open the [live demo](https://gurdeepbajwa.github.io/factomation/examples/demo/Factory.html) on your phone.
 
 The win condition, the **rocket**, is yours to set: for example "invoices, payments and the API reach assembler
 tier, and month-end runs in under 10 minutes".
