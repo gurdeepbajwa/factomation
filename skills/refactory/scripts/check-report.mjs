@@ -71,17 +71,30 @@ for (const [name, engine, opts] of runs) {
           `overflows the viewport: <${el.tagName.toLowerCase()} class="${el.className.baseVal ?? el.className}">`,
         );
     }
-    for (const g of document.querySelectorAll(".tile")) {
-      const box = g.querySelector(".base").getBBox();
-      for (const t of g.querySelectorAll("text")) {
-        const tb = t.getBBox();
-        if (
-          tb.x + tb.width > box.x + box.width + 0.5 ||
-          tb.y + tb.height > box.y + box.height + 0.5
-        ) {
-          out.push(`label clipped: ${g.dataset.info.split(" ·")[0]}`);
-        }
-      }
+    // Factory floor: every machine and label inside the drawing, and no two labels on top of each other.
+    for (const svg of document.querySelectorAll("svg.floor")) {
+      const frame = svg.getBoundingClientRect();
+      const inside = (r) =>
+        r.left >= frame.left - 1 &&
+        r.right <= frame.right + 1 &&
+        r.top >= frame.top - 1 &&
+        r.bottom <= frame.bottom + 1;
+      for (const g of svg.querySelectorAll(".tile"))
+        if (!inside(g.getBoundingClientRect()))
+          out.push(`machine outside the floor: ${g.dataset.info.split(" ·")[0]}`);
+      const tags = [...svg.querySelectorAll(".alt rect")].map((r) => r.getBoundingClientRect());
+      tags.forEach((r, i) => {
+        if (!inside(r))
+          out.push(`label outside the floor: ${svg.querySelectorAll(".alt text")[i].textContent}`);
+        for (const q of tags.slice(i + 1))
+          if (
+            r.left < q.right - 1 &&
+            q.left < r.right - 1 &&
+            r.top < q.bottom - 1 &&
+            q.top < r.bottom - 1
+          )
+            out.push(`labels overlap: ${svg.querySelectorAll(".alt text")[i].textContent}`);
+      });
     }
     const text = document.body.innerText;
     for (const bad of ["undefined", "NaN", "[object Object]", "${"]) {

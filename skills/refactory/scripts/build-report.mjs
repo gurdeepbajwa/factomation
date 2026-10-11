@@ -4,6 +4,7 @@
 // Defaults: .refactory/report.json -> .refactory/Factory.html
 // The schema is documented in ../references/report-schema.md.
 import { readFileSync, writeFileSync } from "node:fs";
+import { floorSvg } from "./floor.mjs";
 
 const input = process.argv[2] ?? ".refactory/report.json";
 const output = process.argv[3] ?? input.replace(/report\.json$/, "Factory.html");
@@ -30,112 +31,9 @@ const TIERS = [
   { key: "t3", name: "bots" },
 ];
 
-// ---------- treemap ----------
-function worst(row, side) {
-  const s = row.reduce((a, x) => a + x.a, 0);
-  const max = Math.max(...row.map((x) => x.a));
-  const min = Math.min(...row.map((x) => x.a));
-  return Math.max((side * side * max) / (s * s), (s * s) / (side * side * min));
-}
-function squarify(items, x, y, w, h) {
-  const total = items.reduce((a, i) => a + i.v, 0);
-  if (!total) return [];
-  const scale = (w * h) / total;
-  let rest = items.map((i) => ({ ...i, a: i.v * scale })).sort((a, b) => b.a - a.a);
-  const out = [];
-  while (rest.length) {
-    const side = Math.min(w, h);
-    const row = [rest[0]];
-    let i = 1;
-    while (i < rest.length && worst([...row, rest[i]], side) <= worst(row, side))
-      row.push(rest[i++]);
-    rest = rest.slice(i);
-    const s = row.reduce((a, q) => a + q.a, 0);
-    if (w >= h) {
-      const cw = s / h;
-      let cy = y;
-      for (const q of row) {
-        const rh = q.a / cw;
-        out.push({ ...q, x, y: cy, w: cw, h: rh });
-        cy += rh;
-      }
-      x += cw;
-      w -= cw;
-    } else {
-      const rh = s / w;
-      let cx = x;
-      for (const q of row) {
-        const rw = q.a / rh;
-        out.push({ ...q, x: cx, y, w: rw, h: rh });
-        cx += rw;
-      }
-      y += rh;
-      h -= rh;
-    }
-  }
-  return out;
-}
-
 const areas = list(r.areas).filter((a) => a.lines > 0);
-const groups = [...new Set(areas.map((a) => a.group ?? ""))];
 const totalLines = areas.reduce((s, a) => s + a.lines, 0) || 1;
-const maxChanges = Math.max(1, ...areas.map((a) => a.changes ?? 0));
-const W = 360;
-const LABEL = 18;
-const MAP_H = Math.max(260, Math.min(520, 120 * groups.length + 200));
-const usable = MAP_H - LABEL * groups.length;
-let cursor = 0;
-const groupSvg = [];
-const tiles = [];
-for (const g of groups) {
-  const members = areas.filter((a) => (a.group ?? "") === g);
-  const lines = members.reduce((s, a) => s + a.lines, 0);
-  const h = Math.max(60, (usable * lines) / totalLines);
-  if (g) {
-    groupSvg.push(
-      `<text class="district" x="0" y="${(cursor + 12).toFixed(1)}">${esc(g.toUpperCase())}</text>`,
-    );
-  }
-  tiles.push(
-    ...squarify(
-      members.map((a) => ({ ...a, v: a.lines })),
-      0,
-      cursor + LABEL,
-      W,
-      h,
-    ),
-  );
-  cursor += LABEL + h;
-}
-const mapH = Math.ceil(cursor);
-
-const tileSvg = tiles
-  .map((t) => {
-    const p = 1.5;
-    const x = t.x + p;
-    const y = t.y + p;
-    const w = t.w - p * 2;
-    const h = t.h - p * 2;
-    const tier = Math.max(0, Math.min(3, t.tier ?? 0));
-    const mapped = t.confidence && t.confidence !== "unknown";
-    const heat = (t.changes ?? 0) / maxChanges;
-    const sub = `${(t.lines / 1000).toFixed(1)}k lines`;
-    const label = w > Math.max(t.name.length * 7, sub.length * 6.7) + 12 && h > 34;
-    const small = !label && w > 24 && h > 15;
-    const info = `${t.group ? t.group + "/" : ""}${t.name} · ${fmt(t.lines)} lines · ${t.changes ?? 0} changes · tier ${tier} ${TIERS[tier].name} · ${t.confidence ?? "unknown"}`;
-    const box = (cls, extra = "") =>
-      `<rect class="${cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="3"${extra}/>`;
-    return `<g class="tile t${tier}${mapped ? "" : " fogged"}" tabindex="0" data-info="${esc(info)}">
-<title>${esc(info)}</title>
-${box("base")}
-${mapped ? "" : box("fog", ' fill="url(#fog)"')}
-${t.confidence === "stale" ? `<path class="stale" d="M${(x + w - 12).toFixed(1)} ${y.toFixed(1)}h9a3 3 0 0 1 3 3v9z"/>` : ""}
-${heat > 0.25 ? `<rect class="heat" x="${(x + 1).toFixed(1)}" y="${(y + 1).toFixed(1)}" width="${(w - 2).toFixed(1)}" height="${(h - 2).toFixed(1)}" rx="2.5" stroke-width="${(1 + heat * 2.5).toFixed(1)}"/>` : ""}
-${label ? `<text class="t-name" x="${(x + 7).toFixed(1)}" y="${(y + 16).toFixed(1)}">${esc(t.name)}</text><text class="t-sub" x="${(x + 7).toFixed(1)}" y="${(y + 29).toFixed(1)}">${sub}</text>` : ""}
-${small ? `<text class="t-tiny" x="${(x + 4).toFixed(1)}" y="${(y + 12).toFixed(1)}">${esc(t.name.slice(0, Math.floor((w - 7) / 5.6)))}</text>` : ""}
-</g>`;
-  })
-  .join("\n");
+const floor = floorSvg(areas, { esc, tierName: (t) => TIERS[t].name });
 
 const tierShare = TIERS.map((_, i) =>
   (
@@ -165,16 +63,14 @@ ${r.win.rocket ? `<p class="rocket">${txt(r.win.rocket)}</p>` : ""}
   : "";
 
 const map = areas.length
-  ? `<section class="map">
-<svg viewBox="0 0 ${W} ${mapH}" role="img" aria-label="Treemap of the codebase. Size is lines of code, colour is automation tier, hatching is unmapped, an orange outline is a hotspot, a red corner is stale.">
-<defs><pattern id="fog" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--paper)" stroke-width="2" opacity=".5"/></pattern></defs>
-${groupSvg.join("\n")}
-${tileSvg}
-</svg>
-<div class="legend">${TIERS.map((t) => `<span class="${t.key}">${t.name}</span>`).join("")}<span class="fogk">unmapped</span><span class="hs">hotspot</span><span class="st">stale</span></div>
-<div class="tileinfo" id="tileinfo">Tap a tile.</div>
-<p class="caption">Size is lines of code. Colour is the automation tier: how much an agent may do there alone. An orange outline marks an area that changed a lot recently.</p>
-</section>`
+  ? `<section class="map fig">
+<div class="corners"><span>Fig 1</span><span>The factory floor</span></div>
+${floor.svg}
+<div class="corners low"><span>Tap a machine</span><button type="button" class="altbtn" aria-pressed="true">Labels</button></div>
+<div class="tileinfo" id="tileinfo" aria-live="polite">${areas.length} areas · ${fmt(totalLines)} lines</div>
+</section>
+<div class="legend">${TIERS.map((t) => `<span class="${t.key}">${["workbench", "furnace", "assembler", "roboport"][TIERS.indexOf(t)]}: ${t.name}</span>`).join("")}<span class="fogk">unmapped</span><span class="hs">smoke: hotspot</span><span class="st">flag: stale</span></div>
+<p class="caption">Each machine is an area. Its kind is the automation tier: how much an agent may do there alone. Its footprint is lines of code. Smoke means it changed a lot recently.</p>`
   : "";
 
 const b = r.bottleneck;
@@ -362,10 +258,18 @@ document.querySelectorAll(".tile").forEach(function (g) {
   function pick() {
     document.querySelectorAll(".tile.sel").forEach(function (x) { x.classList.remove("sel"); });
     g.classList.add("sel");
+    g.closest("svg").classList.add("has-sel");
     document.getElementById("tileinfo").textContent = g.dataset.info;
   }
   g.addEventListener("click", pick);
-  g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") pick(); });
+  g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+});
+document.querySelectorAll(".altbtn").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", String(on));
+    b.closest(".fig").classList.toggle("noalt", !on);
+  });
 });
 </script>
 </body>
