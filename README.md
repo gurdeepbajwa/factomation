@@ -1,0 +1,120 @@
+# Factomation
+
+**Turn a codebase into a factory you map, understand and automate, one area at a time.**
+
+Factomation is an agent skill for Claude Code, Codex, Cursor and other hosts that read `SKILL.md` files. It is built
+for legacy codebases, where nobody left knows why things are the way they are.
+
+It borrows the loop from factory games: explore a bit, build a bit, upgrade, explore further. You never map
+everything before you start improving things. The work is real engineering: the factory words are just a shared
+vocabulary.
+
+<p align="center"><img src="docs/demo-phone.png" alt="Factory.html on a phone: the win condition, a treemap of the codebase coloured by automation tier, and the current bottleneck" width="360"></p>
+
+## How it works
+
+1. **Explore.** The agent maps the codebase: broad and shallow first, then deeper where it matters. Every claim
+   cites a file and line, or it is marked unverified.
+2. **Ask.** You ask "how does this work?" and "why is it like this?". Each question is logged. Questions show which
+   areas are unclear or important, and they steer where the agent digs next. Your answers are the knowledge the code
+   cannot give.
+3. **Upgrade.** Each area has an **automation tier**: how much an agent may change there without asking.
+
+   | Tier | Name      | The area has                                | Agent may                     |
+   | ---- | --------- | ------------------------------------------- | ----------------------------- |
+   | 0    | by hand   | no map, or no tests                         | read and map                  |
+   | 1    | burner    | a verified map; tests pin today's behaviour | small changes you review      |
+   | 2    | assembler | checks that run automatically               | keep-or-revert upgrades alone |
+   | 3    | bots      | enforced budgets for speed, size, errors    | unattended hill climbs        |
+
+   Upgrading an area means adding the checks that let more work run by itself. Fixing issues happens inside an
+   area, at the tier it allows. The current bottleneck always goes first.
+
+4. **Hill climb.** When a fix needs many measured attempts on one number, the factory recommends a hill climb. You
+   start it with `/hillclimb <id>`: one change, one measurement, keep or revert, until it hits the target.
+5. **Learn.** Corrections and feedback go into `.factomation/log.md`. Repeated corrections become rules, enforced in
+   code, types, lint or tests where possible. Lessons that apply to every codebase are proposed back to this repo,
+   only with your approval.
+6. **Read one page.** The agents keep their own notes in whatever shape works for them. You read one page,
+   `Factory.html`: the map, the bottleneck, three questions for you, recommended hill climbs, findings and upgrades.
+   It is built for a phone. See the [demo](examples/demo/Factory.html) (download it and open it in a browser).
+
+The win condition, the **rocket**, is yours to set: for example "invoices, payments and the API reach assembler
+tier, and month-end runs in under 10 minutes".
+
+## Install
+
+```bash
+npx skills add gurdeepbajwa/factomation
+```
+
+Or in Claude Code, as a plugin:
+
+```text
+/plugin marketplace add gurdeepbajwa/factomation
+/plugin install factomation@factomation
+```
+
+Or clone it into your skills folder:
+
+```bash
+git clone https://github.com/gurdeepbajwa/factomation ~/.agents/factomation
+ln -s ~/.agents/factomation/skills/* ~/.claude/skills/
+```
+
+The report check (`scripts/check-report.mjs`) needs [Playwright](https://playwright.dev). Everything else needs only
+git, bash and Node 18 or newer.
+
+## Use
+
+```text
+/factomation map this codebase
+how does an invoice get sent?
+/factomation what should we upgrade next?
+/factomation rebuild the report
+/hillclimb month-end-time
+```
+
+On the first run it creates `.factomation/` at the repo root and asks for your win condition and scope.
+
+## What's inside
+
+```
+skills/factomation/
+  SKILL.md          entry point: vocabulary, the session loop, the rules
+  playbooks/        explore · questions · upgrade · report · reflect
+  references/       tiers, evidence rules, the .factomation/ layout, report.json schema
+  scripts/          hotspots.sh, areas.sh, build-report.mjs, check-report.mjs
+  templates/        config.md, log.md, areas.tsv, hillclimb.md
+skills/hillclimb/
+  SKILL.md          the keep-or-revert loop for one metric
+  references/       benchmark checklist
+examples/demo/      a made-up legacy app's report.json and Factory.html
+LEARNINGS.md        lessons merged back from real codebases
+```
+
+## Privacy
+
+`.factomation/` lives in your repository. Nothing is sent anywhere by this skill. The reflect playbook only ever
+proposes a lesson upstream after it strips project details and you approve the exact text.
+
+## Credits
+
+Ideas borrowed, with thanks:
+
+- Peter Naur, [Programming as Theory Building](https://pages.cs.wisc.edu/~remzi/Naur.pdf) (1985): a program is the
+  theory in its makers' heads.
+- Adam Tornhill, _Your Code as a Crime Scene_: hotspots from size and change frequency.
+- Michael Feathers, _Working Effectively with Legacy Code_: characterization tests.
+- Sillito, Murphy and De Volder, _Questions Programmers Ask During Software Evolution Tasks_ (FSE 2006): the four
+  question kinds.
+- Eliyahu Goldratt, _The Goal_: work on the bottleneck. Toyota's Lean: waste types, stop the line, make wins
+  stick.
+- [pstack](https://github.com/cursor/plugins/tree/main/pstack) by poteto: the hill climb and benchmark discipline.
+- [diagram-design](https://github.com/cathrynlavery/diagram-design): self-contained HTML and SVG, deletion first.
+- [ASD-STE100 skill](https://github.com/danyuchn/asd-ste100-skill): plain, unambiguous writing for agent notes.
+- Factorio and Minecraft, for the loop.
+
+## License
+
+MIT

@@ -1,0 +1,11 @@
+{
+  "name": "factomation",
+  "owner": { "name": "Gurdeep Bajwa" },
+  "plugins": [
+    {
+      "name": "factomation",
+      "source": "./",
+      "description": "Map, understand and automate a codebase one area at a time, with a keep-or-revert hill climb skill."
+    }
+  ]
+}

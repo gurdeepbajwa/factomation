@@ -1,0 +1,254 @@
+{
+  "banner": "Demo. **Ledgerline** is a made-up legacy invoicing app. Every number here is invented to show the report.",
+  "project": "ledgerline",
+  "commit": "a41c9e2",
+  "date": "12 Oct 2026",
+  "session": 9,
+  "summary": "Invoices and the API are mapped and guarded by checks. The current bottleneck is PDF rendering. Reports and the old admin are still in the fog.",
+  "win": {
+    "rocket": "Invoices, payments and the API reach **assembler** tier, and month-end runs in under 10 minutes.",
+    "items": [
+      { "state": "done", "value": "done", "text": "Invoice → PDF → email path verified" },
+      { "state": "part", "value": "2 / 3", "text": "Areas in scope at assembler tier" },
+      { "state": "todo", "value": "38 min", "text": "Month-end run (target 10 min)" }
+    ]
+  },
+  "since": "Payments moved up to **assembler**: characterization tests pin refunds, and the suite runs in the pre-commit hook. **reports** went stale: 4 files changed since it was checked.",
+  "areas": [
+    {
+      "group": "app",
+      "name": "invoices",
+      "lines": 18400,
+      "changes": 61,
+      "tier": 2,
+      "confidence": "verified"
+    },
+    {
+      "group": "app",
+      "name": "payments",
+      "lines": 9200,
+      "changes": 34,
+      "tier": 2,
+      "confidence": "verified"
+    },
+    {
+      "group": "app",
+      "name": "reports",
+      "lines": 12800,
+      "changes": 22,
+      "tier": 1,
+      "confidence": "stale"
+    },
+    {
+      "group": "app",
+      "name": "admin-legacy",
+      "lines": 15100,
+      "changes": 3,
+      "tier": 0,
+      "confidence": "unknown"
+    },
+    {
+      "group": "app",
+      "name": "api",
+      "lines": 6400,
+      "changes": 41,
+      "tier": 3,
+      "confidence": "verified"
+    },
+    {
+      "group": "app",
+      "name": "auth",
+      "lines": 2100,
+      "changes": 5,
+      "tier": 1,
+      "confidence": "sketched"
+    },
+    {
+      "group": "jobs",
+      "name": "month-end",
+      "lines": 4300,
+      "changes": 18,
+      "tier": 1,
+      "confidence": "sketched"
+    },
+    {
+      "group": "jobs",
+      "name": "pdf-render",
+      "lines": 3900,
+      "changes": 27,
+      "tier": 1,
+      "confidence": "sketched"
+    },
+    {
+      "group": "jobs",
+      "name": "email",
+      "lines": 1200,
+      "changes": 6,
+      "tier": 2,
+      "confidence": "verified"
+    },
+    {
+      "group": "jobs",
+      "name": "imports",
+      "lines": 2600,
+      "changes": 2,
+      "tier": 0,
+      "confidence": "unknown"
+    },
+    {
+      "group": "shared",
+      "name": "lib",
+      "lines": 11200,
+      "changes": 29,
+      "tier": 1,
+      "confidence": "sketched"
+    },
+    {
+      "group": "shared",
+      "name": "db",
+      "lines": 5300,
+      "changes": 12,
+      "tier": 1,
+      "confidence": "sketched"
+    },
+    {
+      "group": "shared",
+      "name": "templates",
+      "lines": 3400,
+      "changes": 9,
+      "tier": 0,
+      "confidence": "unknown"
+    }
+  ],
+  "bottleneck": {
+    "title": "PDF rendering runs one invoice at a time",
+    "confidence": "sketched",
+    "body": "Month-end renders every invoice in a single loop and waits for each PDF before starting the next. That loop is about 30 of the 38 minutes.",
+    "plan": "Pin today's PDFs with byte-for-byte snapshot tests, then render in a small worker pool. Run it as the `month-end-time` hill climb.",
+    "evidence": "jobs/month_end.php:212 · profile of the 3 Oct run: 31m 40s in render_invoice()"
+  },
+  "questions": [
+    {
+      "text": "Does anyone still use **admin-legacy**, or did the new admin replace all of it?",
+      "evidence": "admin-legacy · 15.1k lines · 3 changes in 90 days"
+    },
+    {
+      "text": "Must invoice PDFs stay byte-identical, or only look the same?",
+      "evidence": "Decides how strict the snapshot tests for pdf-render must be."
+    },
+    {
+      "text": "Why does month-end skip invoices created after 23:00 on the last day?",
+      "evidence": "jobs/month_end.php:88 · no comment, no linked issue"
+    }
+  ],
+  "hillclimbs": [
+    {
+      "id": "month-end-time",
+      "title": "Shorten the month-end run",
+      "why": "It blocks finance for most of an hour, and PDF rendering is most of it.",
+      "metric": "Wall time of month-end on the 2,000-invoice fixture",
+      "baseline": "38 min",
+      "target": "under 10 min",
+      "area": "jobs/month-end, jobs/pdf-render"
+    },
+    {
+      "id": "dashboard-queries",
+      "title": "Cut queries on the dashboard",
+      "why": "The dashboard runs one query per customer. It slows as customers grow.",
+      "metric": "SQL queries per dashboard load",
+      "baseline": "214",
+      "target": "under 10",
+      "area": "app/invoices"
+    }
+  ],
+  "flows": [
+    {
+      "title": "How an invoice is sent",
+      "steps": [
+        { "name": "InvoiceController", "note": "POST /invoices/:id/send" },
+        { "name": "InvoiceService", "note": "totals, tax, lock" },
+        { "name": "pdf-render", "note": "one at a time", "hot": true },
+        { "name": "email job", "note": "queue + retry" }
+      ],
+      "caption": "Orange marks the current bottleneck."
+    }
+  ],
+  "findings": [
+    {
+      "title": "Tax is calculated in two places",
+      "impact": "high",
+      "confidence": "verified",
+      "body": "The invoice screen and the PDF compute tax separately. They round differently on mixed-rate invoices.",
+      "evidence": "app/Invoice/Totals.php:40 · jobs/pdf/Totals.php:18"
+    },
+    {
+      "title": "Dashboard runs one query per customer",
+      "impact": "med",
+      "confidence": "sketched",
+      "body": "A loop loads each customer's balance on its own.",
+      "evidence": "app/Dashboard/Balances.php:61 · 214 queries on the demo data"
+    },
+    {
+      "title": "The `utils` file is a junction",
+      "impact": "med",
+      "confidence": "verified",
+      "body": "38 files import it, and it mixes dates, money and HTML helpers.",
+      "evidence": "shared/lib/utils.php · 1,840 lines"
+    },
+    {
+      "title": "Import job has no tests",
+      "impact": "low",
+      "confidence": "unverified",
+      "body": "It ran last in March. It may be dead.",
+      "evidence": "jobs/imports · last change 7 months ago"
+    }
+  ],
+  "upgrades": [
+    {
+      "date": "11 Oct",
+      "session": 8,
+      "verdict": "kept",
+      "title": "Payments: pin refunds with characterization tests",
+      "before": { "value": 0, "label": "0 tests" },
+      "after": { "value": 46, "label": "46 tests" },
+      "lowerIsBetter": false,
+      "note": "Tier 1 → 2. The suite runs in the pre-commit hook."
+    },
+    {
+      "date": "9 Oct",
+      "session": 7,
+      "verdict": "reverted",
+      "title": "Cache customer balances for the dashboard",
+      "before": { "value": 1.9, "label": "1.9 s" },
+      "after": { "value": 1.8, "label": "1.8 s" },
+      "note": "Inside run-to-run noise. The real cost is the query count."
+    },
+    {
+      "date": "6 Oct",
+      "session": 5,
+      "verdict": "kept",
+      "title": "API: batch the invoice list query",
+      "before": { "value": 51, "label": "51 queries" },
+      "after": { "value": 2, "label": "2 queries" }
+    }
+  ],
+  "stories": [
+    {
+      "title": "Why invoices lock at 23:00",
+      "body": "The old bank export ran at 23:30 and read the invoices table directly. Locking at 23:00 kept totals still while it ran. The export moved to the API in 2023, so the lock may no longer be needed.",
+      "source": "engineer, session 4 · git blame on month_end.php"
+    },
+    {
+      "title": "Two admins",
+      "body": "The new admin was built beside the old one to avoid a big-bang switch. Finance still uses the old one for credit notes.",
+      "source": "engineer, session 2"
+    }
+  ],
+  "hotspots": [
+    { "path": "app/Invoice/InvoiceService.php", "lines": 2140, "changes": 38 },
+    { "path": "jobs/pdf/render_invoice.php", "lines": 1320, "changes": 21 },
+    { "path": "shared/lib/utils.php", "lines": 1840, "changes": 14 },
+    { "path": "app/Dashboard/Balances.php", "lines": 610, "changes": 17 },
+    { "path": "api/routes.php", "lines": 480, "changes": 19 }
+  ]
+}

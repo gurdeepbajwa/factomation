@@ -1,0 +1,17 @@
+{
+  "name": "factomation",
+  "version": "0.1.0",
+  "description": "Turn a codebase into a factory you map, understand and automate one area at a time, plus a keep-or-revert hill climb skill.",
+  "author": { "name": "Gurdeep Bajwa" },
+  "homepage": "https://github.com/gurdeepbajwa/factomation",
+  "repository": "https://github.com/gurdeepbajwa/factomation",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "legacy-code",
+    "codebase-mapping",
+    "refactoring",
+    "performance",
+    "hill-climb"
+  ]
+}
