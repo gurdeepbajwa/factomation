@@ -11,6 +11,7 @@ example.
   "commit": "short sha the map was built at",
   "date": "12 Oct 2026",
   "session": 9,
+  "mode": "normal | enterprise",
   "summary": "two sentences: where things stand",
   "win": {
     "rocket": "the win condition from config.md",
@@ -60,6 +61,27 @@ example.
       "after": { "value": 2, "label": "2 queries" },
       "lowerIsBetter": true,
       "note": "",
+    },
+  ],
+  "trends": [
+    {
+      "metric": "lint violations in invoices",
+      "area": "invoices",
+      "unit": "",
+      "lowerIsBetter": true,
+      "target": 0,
+      "points": [{ "label": "S3", "value": 212 }], // oldest first, 2–12 points
+    },
+  ],
+  "ridealongs": [
+    {
+      "area": "",
+      "title": "",
+      "size": "~120 lines",
+      "status": "ready | drafted | waiting",
+      "improves": "",
+      "vehicle": "the business work it ships with",
+      "evidence": "",
     },
   ],
   "stories": [{ "title": "", "body": "why it is like this", "source": "" }],

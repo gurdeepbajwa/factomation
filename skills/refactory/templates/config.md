@@ -9,6 +9,27 @@ month-end runs in under 10 minutes." -->
 
 <!-- Areas in scope, and areas to leave alone. -->
 
+## Mode
+
+normal
+
+<!-- `normal`: one owner, ships any day. `enterprise`: shared codebase with a release process; trend up, never
+sledgehammer (see references/trend-up.md in the skill). -->
+
+## Change process
+
+<!-- Enterprise mode. How a change reaches production, so every upgrade fits it. Example:
+- release: weekly train, cut on Tuesday; freeze in the last week of each quarter
+- review: CODEOWNERS approve; payments needs two approvals
+- size: at most ~300 changed lines per PR, excluding generated files
+- risk: behaviour changes ship behind flags; no change ships without a business reason except tests and checks -->
+
+## Upcoming work
+
+<!-- Enterprise mode. Business work planned per area in the next few months. These are the vehicles for ride-alongs. Example:
+- invoices: e-invoicing (Q1)
+- reports: new tax report (Feb) -->
+
 ## Budget per autonomous pass
 
 30 minutes or 40 files read, then stop and report.

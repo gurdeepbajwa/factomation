@@ -13,6 +13,22 @@ bit, upgrade, explore further. Full coverage never comes first.
 This is engineering work. Do not add points, badges or game talk to anything you write. The factory words below are
 the shared vocabulary, nothing more.
 
+## Modes
+
+`config.md` sets the mode. The explore playbook asks for it on the first session. If it is missing, use `normal`.
+
+- **`normal`:** for a codebase one person or one team owns and can ship any day. A kept upgrade ships when its
+  checks pass. A structural change (one that moves code across files or changes an interface) needs the user's
+  go-ahead, and goes in steps where it can.
+- **`enterprise`:** trend up, never sledgehammer. For large codebases where a change can reach many teams and users,
+  and where code ships through a release process, usually with a business reason. It never rewrites. It improves the
+  code in small steps that each ship safely on their own and never let things get worse: **ratchets** stop a number
+  from getting worse, **ride-alongs** ship prepared improvements with the feature work in the same area, and
+  **parallel changes** move structure without a big switch. Read
+  [references/trend-up.md](references/trend-up.md) before any upgrade.
+
+Both modes measure **trends**: the report tracks a few numbers per area over time. Ratchets are useful in both.
+
 ## Vocabulary
 
 - **Area:** a part of the codebase you map and upgrade as a unit (an app, a package, a service, a job).
@@ -29,6 +45,8 @@ the shared vocabulary, nothing more.
 - **Upgrade:** raise an area's tier (add the missing tests, checks or budgets), or fix an issue inside an area at
   the tier it allows.
 - **Bottleneck:** the one thing that most limits the codebase right now. Work on it before anything else.
+- **Ratchet:** a check that fails when a number gets worse and lets it improve. The usual way to raise a tier.
+- **Ride-along:** an improvement prepared ahead, waiting to ship with business work in its area (its vehicle).
 - **Hill climb:** a measured, repeated improvement of one metric. Hand it to the `hillclimb` skill.
 - **Rocket:** the win condition the user sets. "The whole codebase" is not a win condition.
 
@@ -37,15 +55,17 @@ the shared vocabulary, nothing more.
 Each codebase keeps its state in `.refactory/` at the repo root. See
 [references/instance.md](references/instance.md). Create it from [templates/](templates/) on the first session.
 
-| File                 | Who reads it               | Format                                                     |
-| -------------------- | -------------------------- | ---------------------------------------------------------- |
-| `config.md`          | every session              | the rocket, scope, how to run checks, local rules          |
-| `log.md`             | every session              | append-only memory, fixed format                           |
-| `areas.tsv`          | every session, scripts     | fixed columns, read by `scripts/areas.sh`                  |
-| `notes/`             | you                        | free: organise it however works best                       |
-| `hillclimbs/<id>.md` | `hillclimb` skill          | one spec per recommended climb                             |
-| `report.json`        | `scripts/build-report.mjs` | [references/report-schema.md](references/report-schema.md) |
-| `Factory.html`       | the user only              | built from `report.json`, never edited by hand             |
+| File                 | Who reads it                 | Format                                                     |
+| -------------------- | ---------------------------- | ---------------------------------------------------------- |
+| `config.md`          | every session                | the rocket, scope, how to run checks, local rules          |
+| `log.md`             | every session                | append-only memory, fixed format                           |
+| `areas.tsv`          | every session, scripts       | fixed columns, read by `scripts/areas.sh`                  |
+| `trends.tsv`         | upgrade and report playbooks | one row per measurement: date, commit, area, metric, value |
+| `ridealongs.md`      | upgrade and report playbooks | the queue of improvements waiting for a vehicle            |
+| `notes/`             | you                          | free: organise it however works best                       |
+| `hillclimbs/<id>.md` | `hillclimb` skill            | one spec per recommended climb                             |
+| `report.json`        | `scripts/build-report.mjs`   | [references/report-schema.md](references/report-schema.md) |
+| `Factory.html`       | the user only                | built from `report.json`, never edited by hand             |
 
 Do not read `Factory.html` in a normal session. Read it only in the report playbook.
 
@@ -77,7 +97,13 @@ Do not read `Factory.html` in a normal session. Read it only in the report playb
 - **The tier gates the change.** Never change code in an area beyond what its tier allows. Data, migrations, auth,
   payments, external APIs and anything without a reversible check always need the user's go-ahead, whatever the
   tier.
+- **Small steps.** No unrelated cleanups or reformatting in either mode. In `normal` mode a rewrite of an area needs
+  the user's go-ahead and its behaviour pinned by tests first. In `enterprise` mode there are no rewrites and no
+  big-bang upgrades: each change is small, reviewable, safe on its own, and follows the change process in
+  `config.md`. When a big change is truly needed, make the case in the report; do not make the change.
 - **One change, one check, keep or revert, one commit.** Never batch upgrades.
+- **People ship.** Merge, release or turn on a flag only when the user asks, in `normal` mode. Never in `enterprise`
+  mode: prepare the change and hand it over.
 - **Stop the line.** When a check fails, stop and find out why before you do anything else. Log the cause.
 - **The bottleneck first.** Improving anything that is not the current bottleneck is waste. After an upgrade, check
   whether the bottleneck moved.

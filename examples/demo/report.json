@@ -4,13 +4,26 @@
   "commit": "a41c9e2",
   "date": "12 Oct 2026",
   "session": 9,
+  "mode": "enterprise",
   "summary": "Invoices and the API are mapped and guarded by checks. The current bottleneck is PDF rendering. Reports and the old admin are still in the fog.",
   "win": {
     "rocket": "Invoices, payments and the API reach **assembler** tier, and month-end runs in under 10 minutes.",
     "items": [
-      { "state": "done", "value": "done", "text": "Invoice → PDF → email path verified" },
-      { "state": "part", "value": "2 / 3", "text": "Areas in scope at assembler tier" },
-      { "state": "todo", "value": "38 min", "text": "Month-end run (target 10 min)" }
+      {
+        "state": "done",
+        "value": "done",
+        "text": "Invoice → PDF → email path verified"
+      },
+      {
+        "state": "part",
+        "value": "2 / 3",
+        "text": "Areas in scope at assembler tier"
+      },
+      {
+        "state": "todo",
+        "value": "38 min",
+        "text": "Month-end run (target 10 min)"
+      }
     ]
   },
   "since": "Payments moved up to **assembler**: characterization tests pin refunds, and the suite runs in the pre-commit hook. **reports** went stale: 4 files changed since it was checked.",
@@ -165,10 +178,23 @@
     {
       "title": "How an invoice is sent",
       "steps": [
-        { "name": "InvoiceController", "note": "POST /invoices/:id/send" },
-        { "name": "InvoiceService", "note": "totals, tax, lock" },
-        { "name": "pdf-render", "note": "one at a time", "hot": true },
-        { "name": "email job", "note": "queue + retry" }
+        {
+          "name": "InvoiceController",
+          "note": "POST /invoices/:id/send"
+        },
+        {
+          "name": "InvoiceService",
+          "note": "totals, tax, lock"
+        },
+        {
+          "name": "pdf-render",
+          "note": "one at a time",
+          "hot": true
+        },
+        {
+          "name": "email job",
+          "note": "queue + retry"
+        }
       ],
       "caption": "Orange marks the current bottleneck."
     }
@@ -209,8 +235,14 @@
       "session": 8,
       "verdict": "kept",
       "title": "Payments: pin refunds with characterization tests",
-      "before": { "value": 0, "label": "0 tests" },
-      "after": { "value": 46, "label": "46 tests" },
+      "before": {
+        "value": 0,
+        "label": "0 tests"
+      },
+      "after": {
+        "value": 46,
+        "label": "46 tests"
+      },
       "lowerIsBetter": false,
       "note": "Tier 1 → 2. The suite runs in the pre-commit hook."
     },
@@ -219,8 +251,14 @@
       "session": 7,
       "verdict": "reverted",
       "title": "Cache customer balances for the dashboard",
-      "before": { "value": 1.9, "label": "1.9 s" },
-      "after": { "value": 1.8, "label": "1.8 s" },
+      "before": {
+        "value": 1.9,
+        "label": "1.9 s"
+      },
+      "after": {
+        "value": 1.8,
+        "label": "1.8 s"
+      },
       "note": "Inside run-to-run noise. The real cost is the query count."
     },
     {
@@ -228,8 +266,166 @@
       "session": 5,
       "verdict": "kept",
       "title": "API: batch the invoice list query",
-      "before": { "value": 51, "label": "51 queries" },
-      "after": { "value": 2, "label": "2 queries" }
+      "before": {
+        "value": 51,
+        "label": "51 queries"
+      },
+      "after": {
+        "value": 2,
+        "label": "2 queries"
+      }
+    }
+  ],
+  "trends": [
+    {
+      "metric": "Lint violations in invoices",
+      "area": "invoices · ratchet added in session 4, baseline only goes down",
+      "lowerIsBetter": true,
+      "target": 0,
+      "points": [
+        {
+          "label": "S3",
+          "value": 212
+        },
+        {
+          "label": "S4",
+          "value": 212
+        },
+        {
+          "label": "S5",
+          "value": 188
+        },
+        {
+          "label": "S6",
+          "value": 161
+        },
+        {
+          "label": "S7",
+          "value": 149
+        },
+        {
+          "label": "S8",
+          "value": 120
+        },
+        {
+          "label": "S9",
+          "value": 97
+        }
+      ]
+    },
+    {
+      "metric": "Month-end run",
+      "unit": "min",
+      "area": "month-end · the rocket's last item",
+      "lowerIsBetter": true,
+      "target": 10,
+      "points": [
+        {
+          "label": "S2",
+          "value": 52
+        },
+        {
+          "label": "S4",
+          "value": 51
+        },
+        {
+          "label": "S6",
+          "value": 44
+        },
+        {
+          "label": "S8",
+          "value": 38
+        },
+        {
+          "label": "S9",
+          "value": 38
+        }
+      ]
+    },
+    {
+      "metric": "Hotspots with tests (of 12)",
+      "area": "whole codebase",
+      "lowerIsBetter": false,
+      "target": 12,
+      "points": [
+        {
+          "label": "S1",
+          "value": 2
+        },
+        {
+          "label": "S3",
+          "value": 3
+        },
+        {
+          "label": "S5",
+          "value": 5
+        },
+        {
+          "label": "S7",
+          "value": 6
+        },
+        {
+          "label": "S9",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "metric": "Untyped files in reports",
+      "area": "reports · stale since the tax change, needs a fresh look",
+      "lowerIsBetter": true,
+      "target": 0,
+      "points": [
+        {
+          "label": "S5",
+          "value": 31
+        },
+        {
+          "label": "S6",
+          "value": 31
+        },
+        {
+          "label": "S7",
+          "value": 33
+        },
+        {
+          "label": "S8",
+          "value": 34
+        },
+        {
+          "label": "S9",
+          "value": 36
+        }
+      ]
+    }
+  ],
+  "ridealongs": [
+    {
+      "area": "invoices",
+      "title": "Split `InvoiceService.send` into render and deliver",
+      "size": "~120 lines",
+      "status": "ready",
+      "improves": "Lets e-invoicing add a third delivery channel without touching PDF rendering.",
+      "vehicle": "E-invoicing (Q1), or any change to invoice delivery",
+      "evidence": "src/invoices/service.ts:88 · branch refactory/invoice-send-split"
+    },
+    {
+      "area": "month-end",
+      "title": "Run customer statements in batches of 500",
+      "size": "~60 lines + flag",
+      "status": "drafted",
+      "improves": "Cuts month-end by about 12 minutes in the replay. Ships behind a flag, off by default.",
+      "vehicle": "The February statement redesign",
+      "evidence": ".refactory/hillclimbs/month-end-time.tsv rows 4–6"
+    },
+    {
+      "area": "reports",
+      "title": "Characterization tests for the tax summary",
+      "size": "~200 lines, tests only",
+      "status": "waiting",
+      "improves": "Pins today's tax totals so the new tax report can change the code safely.",
+      "vehicle": "New tax report (Feb)",
+      "evidence": "src/reports/tax.ts:1–240 · needs the area verified again first"
     }
   ],
   "stories": [
@@ -245,10 +441,30 @@
     }
   ],
   "hotspots": [
-    { "path": "app/Invoice/InvoiceService.php", "lines": 2140, "changes": 38 },
-    { "path": "jobs/pdf/render_invoice.php", "lines": 1320, "changes": 21 },
-    { "path": "shared/lib/utils.php", "lines": 1840, "changes": 14 },
-    { "path": "app/Dashboard/Balances.php", "lines": 610, "changes": 17 },
-    { "path": "api/routes.php", "lines": 480, "changes": 19 }
+    {
+      "path": "app/Invoice/InvoiceService.php",
+      "lines": 2140,
+      "changes": 38
+    },
+    {
+      "path": "jobs/pdf/render_invoice.php",
+      "lines": 1320,
+      "changes": 21
+    },
+    {
+      "path": "shared/lib/utils.php",
+      "lines": 1840,
+      "changes": 14
+    },
+    {
+      "path": "app/Dashboard/Balances.php",
+      "lines": 610,
+      "changes": 17
+    },
+    {
+      "path": "api/routes.php",
+      "lines": 480,
+      "changes": 19
+    }
   ]
 }

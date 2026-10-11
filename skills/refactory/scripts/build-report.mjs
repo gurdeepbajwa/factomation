@@ -242,6 +242,56 @@ const upgrades = list(r.upgrades).length
       .join("")}</ul>`
   : "";
 
+function spark(t) {
+  const pts = list(t.points).filter((p) => Number.isFinite(Number(p.value)));
+  if (pts.length < 2) return "";
+  const vals = pts.map((p) => Number(p.value));
+  const target = Number.isFinite(Number(t.target)) ? Number(t.target) : null;
+  const lo = Math.min(...vals, target ?? Infinity);
+  const hi = Math.max(...vals, target ?? -Infinity);
+  const span = hi - lo || 1;
+  const [SW, SH, P] = [300, 64, 6];
+  const X = (i) => P + (i * (SW - P * 2)) / (pts.length - 1);
+  const Y = (v) => P + ((hi - v) / span) * (SH - P * 2);
+  const line = vals.map((v, i) => `${i ? "L" : "M"}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join("");
+  const goal =
+    target === null
+      ? ""
+      : `<line class="goal" x1="${P}" x2="${SW - P}" y1="${Y(target).toFixed(1)}" y2="${Y(target).toFixed(1)}"/>`;
+  const last = vals.length - 1;
+  return `<svg viewBox="0 0 ${SW} ${SH}" role="img" aria-label="${esc(`${t.metric}: ${vals.join(", ")}`)}">${goal}<path class="line" d="${line}"/><circle class="dot" cx="${X(last).toFixed(1)}" cy="${Y(vals[last]).toFixed(1)}" r="3.5"/></svg><div class="axis"><span>${esc(pts[0].label ?? "")}</span><span>${esc(pts[last].label ?? "")}</span></div>`;
+}
+function trendCard(t) {
+  const vals = list(t.points)
+    .map((p) => Number(p.value))
+    .filter(Number.isFinite);
+  if (!vals.length) return "";
+  const first = vals[0];
+  const now = vals[vals.length - 1];
+  const diff = now - first;
+  const lower = t.lowerIsBetter !== false;
+  const dir = diff === 0 ? "flat" : diff < 0 === lower ? "up" : "down";
+  const unit = t.unit ? ` ${esc(t.unit)}` : "";
+  const pct = first ? ` (${Math.abs(Math.round((diff / first) * 100))}%)` : "";
+  const change =
+    diff === 0 ? "no change" : `${diff > 0 ? "+" : "−"}${fmt(Math.abs(diff))}${unit}${pct}`;
+  return `<article class="card trend ${dir}"><h3>${txt(t.metric)}</h3><div class="now"><b>${fmt(now)}${unit}</b><span>${change}${Number.isFinite(Number(t.target)) ? ` · target ${fmt(t.target)}${unit}` : ""}</span></div>${spark(t)}${t.area ? `<div class="evidence">${txt(t.area)}</div>` : ""}</article>`;
+}
+const trends = list(r.trends).length
+  ? `<div class="cols">${list(r.trends).map(trendCard).join("")}</div><p class="caption">Each line is one number measured the same way every session. Green is moving the right way, red the wrong way. The dashed line is the target.</p>`
+  : "";
+
+const ridealongs = list(r.ridealongs).length
+  ? `<div class="cols">${list(r.ridealongs)
+      .map(
+        (a) =>
+          `<article class="card ride"><h3>${txt(a.title)}</h3><p><span class="tag s-${esc(a.status ?? "waiting")}">${esc(a.status ?? "waiting")}</span>${txt(a.improves)}</p><dl>${a.area ? `<dt>area</dt><dd>${txt(a.area)}</dd>` : ""}${a.size ? `<dt>size</dt><dd>${txt(a.size)}</dd>` : ""}<dt>ships with</dt><dd>${txt(a.vehicle ?? "any change to this area")}</dd></dl>${evidence(a.evidence)}</article>`,
+      )
+      .join(
+        "",
+      )}</div><p class="caption">Small improvements prepared ahead. Each waits for business work in its area and ships with it as its own change.</p>`
+  : "";
+
 const stories = list(r.stories)
   .map(
     (s) =>
@@ -268,6 +318,7 @@ const meta = [
   r.commit && `Map at ${esc(r.commit)}`,
   r.date && esc(r.date),
   r.session && `session ${esc(r.session)}`,
+  r.mode && `${esc(r.mode)} mode`,
 ]
   .filter(Boolean)
   .join(" · ");
@@ -299,6 +350,8 @@ ${section("Questions for you", questions)}
 ${section("Recommended hill climbs", climbs)}
 ${section("How it flows", flows)}
 ${section("Findings", findings)}
+${section("Trends", trends)}
+${section("Ready to ride along", ridealongs)}
 ${section("Upgrades", upgrades)}
 ${section("Why it's like this", stories)}
 ${section("Hotspots", hotspots)}
