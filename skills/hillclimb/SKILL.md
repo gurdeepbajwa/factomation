@@ -19,6 +19,8 @@ measured, each one kept or reverted in full. You never claim a win from reading 
   these fields: metric, measure command, baseline, target, guards, lower is better, out of bounds. Save it as
   `hillclimb-<id>.md` at the repo root, or wherever the user wants it.
 - If the target, the metric or the guards are unclear, ask now. Do not start a loop on a vague target.
+- Tell the user how long you expect the climb to take: the harness, then about how many attempts. Run `date` at the
+  start and after each attempt, and report when you pass twice the estimate.
 
 ## 2. Build the measurement and prove it
 

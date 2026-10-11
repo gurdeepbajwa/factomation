@@ -47,6 +47,8 @@ Both modes measure **trends**: the report tracks a few numbers per area over tim
 - **Bottleneck:** the one thing that most limits the codebase right now. Work on it before anything else.
 - **Ratchet:** a check that fails when a number gets worse and lets it improve. The usual way to raise a tier.
 - **Ride-along:** an improvement prepared ahead, waiting to ship with business work in its area (its vehicle).
+- **Size:** small (under an hour), medium (a few hours) or large (a day or more; propose it, never start it). See the
+  upgrade playbook.
 - **Hill climb:** a measured, repeated improvement of one metric. Hand it to the `hillclimb` skill.
 - **Rocket:** the win condition the user sets. "The whole codebase" is not a win condition.
 

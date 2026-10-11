@@ -5,6 +5,21 @@ Raise an area's automation tier, or fix an issue inside an area at the tier it a
 Every upgrade is small and moves a trend the right way. In `enterprise` mode, read
 [../references/trend-up.md](../references/trend-up.md) first; none of its upgrades is a rewrite.
 
+## Size it before you start
+
+Tell the user the size and a rough time before any other work.
+
+| Size   | What it is                                                     | Time          | What you do                                                                                                        |
+| ------ | -------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Small  | one change in one area                                         | under 1 h     | do it, within the tier gate                                                                                        |
+| Medium | a few changes in one area, or a tier raise                     | 2–4 h         | say so, then do it unless the user asked for something quick                                                       |
+| Large  | many areas, a structural change, or a new framework or library | a day or more | do not start: give the estimate, propose a Medium version that keeps the core, and list what the full version adds |
+
+- Have the first kept change, or a failing check that proves the problem, within the first hour. Build from there.
+- Run `date` at the start and at each step. When a step runs past twice its share of the estimate, tell the user
+  where it stands and what is left.
+- In `enterprise` mode a Large change is never done as one piece. The proposal is the written case (see below).
+
 ## Pick the upgrade
 
 1. Work on the current bottleneck. If the bottleneck's area is below the tier the fix needs, the upgrade is to

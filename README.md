@@ -10,7 +10,7 @@ It borrows the loop from factory games: explore a bit, build a bit, upgrade, exp
 everything before you start improving things. The work is real engineering: the factory words are just a shared
 vocabulary.
 
-<p align="center"><img src="docs/demo-phone.png" alt="Factory.html on a phone: the win condition, a treemap of the codebase coloured by automation tier, and the current bottleneck" width="360"></p>
+<p align="center"><img src="docs/demo-phone.png" alt="Factory.html on a phone: the win condition, the factory floor, with one machine per area whose kind shows its automation tier, and the current bottleneck" width="360"></p>
 
 ## Two modes
 
@@ -139,6 +139,8 @@ Ideas borrowed, with thanks:
 - Eliyahu Goldratt, _The Goal_: work on the bottleneck. Toyota's Lean: waste types, stop the line, make wins
   stick.
 - [pstack](https://github.com/cursor/plugins/tree/main/pstack) by poteto: the hill climb and benchmark discipline.
+- [anatomy](https://github.com/wheresryan22/anatomy) by Ryan: the isometric projection and four-tone shading of the
+  factory floor, and sizing work before you start.
 - [diagram-design](https://github.com/cathrynlavery/diagram-design): self-contained HTML and SVG, deletion first.
 - [ASD-STE100 skill](https://github.com/danyuchn/asd-ste100-skill): plain, unambiguous writing for agent notes.
 - Martin Fowler, preparatory refactoring ("make the change easy, then make the easy change") and the strangler fig;

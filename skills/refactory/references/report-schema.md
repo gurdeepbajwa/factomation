@@ -89,5 +89,6 @@ example.
 }
 ```
 
-Map colours show the tier. Hatching marks `unknown` areas. An orange outline marks areas with many recent changes. A
-red corner marks `stale` areas. Tapping a tile shows its numbers.
+The map is the factory floor (`scripts/floor.mjs`): one platform per group and one machine per area. The machine
+shows the tier (workbench, furnace, assembler, roboport) and its footprint the lines of code. Smoke marks many recent
+changes, a red flag a `stale` area, and a hatched tile an `unknown` one. Tapping a machine shows its numbers.
