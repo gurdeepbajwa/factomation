@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // Build Factory.html from report.json.
 // Usage: node build-report.mjs [report.json] [Factory.html]
-// Defaults: .factomation/report.json -> .factomation/Factory.html
+// Defaults: .refactory/report.json -> .refactory/Factory.html
 // The schema is documented in ../references/report-schema.md.
 import { readFileSync, writeFileSync } from "node:fs";
 
-const input = process.argv[2] ?? ".factomation/report.json";
+const input = process.argv[2] ?? ".refactory/report.json";
 const output = process.argv[3] ?? input.replace(/report\.json$/, "Factory.html");
 const r = JSON.parse(readFileSync(input, "utf8"));
 
@@ -302,7 +302,7 @@ ${section("Findings", findings)}
 ${section("Upgrades", upgrades)}
 ${section("Why it's like this", stories)}
 ${section("Hotspots", hotspots)}
-<footer>Built by factomation from the agents' notes${r.commit ? ` at ${esc(r.commit)}` : ""}. Agents read this page only when they rebuild it.</footer>
+<footer>Built by refactory from the agents' notes${r.commit ? ` at ${esc(r.commit)}` : ""}. Agents read this page only when they rebuild it.</footer>
 </main>
 <script>
 document.querySelectorAll(".tile").forEach(function (g) {

@@ -1,9 +1,9 @@
-# The .factomation/ folder
+# The .refactory/ folder
 
 One folder per codebase, at the repo root.
 
 ```
-.factomation/
+.refactory/
   config.md          the rocket, scope, budget, how to run checks, local rules
   log.md             append-only memory (format below)
   areas.tsv          one row per area (columns below)

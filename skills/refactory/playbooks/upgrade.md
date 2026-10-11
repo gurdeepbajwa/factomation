@@ -37,5 +37,5 @@ architecture first, then types, lint or CI, then tests, and a written rule last.
 ## Hand off a hill climb
 
 When an improvement needs many measured attempts on one metric, do not loop here. Write or update
-`.factomation/hillclimbs/<id>.md` and tell the user to run `/hillclimb <id>`. It appears on the report as a
+`.refactory/hillclimbs/<id>.md` and tell the user to run `/hillclimb <id>`. It appears on the report as a
 recommended hill climb.

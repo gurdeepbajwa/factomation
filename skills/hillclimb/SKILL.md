@@ -1,6 +1,6 @@
 ---
 name: hillclimb
-description: Improve one measurable metric step by step - one change, one measurement, keep or revert - until it hits a target. Use when the user runs "/hillclimb <id>" for a climb that factomation recommended (spec in .factomation/hillclimbs/<id>.md), or asks to hill climb, optimise or tune one number (speed, size, query count, memory, error rate, accuracy) against a target. Works with or without factomation.
+description: Improve one measurable metric step by step - one change, one measurement, keep or revert - until it hits a target. Use when the user runs "/hillclimb <id>" for a climb that refactory recommended (spec in .refactory/hillclimbs/<id>.md), or asks to hill climb, optimise or tune one number (speed, size, query count, memory, error rate, accuracy) against a target. Works with or without refactory.
 ---
 
 # Hill climb
@@ -10,12 +10,12 @@ measured, each one kept or reverted in full. You never claim a win from reading 
 
 ## 1. Load the spec
 
-- With factomation: read `.factomation/hillclimbs/<id>.md`, `.factomation/config.md`, and the notes for the areas the
-  spec names. Check each area's tier in `.factomation/areas.tsv`:
+- With refactory: read `.refactory/hillclimbs/<id>.md`, `.refactory/config.md`, and the notes for the areas the
+  spec names. Check each area's tier in `.refactory/areas.tsv`:
   - tier 3: run unattended inside the spec's guards;
   - tier 2: run alone, but stop after each kept change if the user asked to review;
-  - tier 0–1: ask the user before every change, or raise the tier first with factomation's upgrade playbook.
-- Without factomation: write the same spec with the user from `templates/hillclimb.md` in the factomation skill, or
+  - tier 0–1: ask the user before every change, or raise the tier first with refactory's upgrade playbook.
+- Without refactory: write the same spec with the user from `templates/hillclimb.md` in the refactory skill, or
   these fields: metric, measure command, baseline, target, guards, lower is better, out of bounds. Save it as
   `hillclimb-<id>.md` at the repo root, or wherever the user wants it.
 - If the target, the metric or the guards are unclear, ask now. Do not start a loop on a vague target.
@@ -35,7 +35,7 @@ Vet every number with [references/benchmark-checklist.md](references/benchmark-c
 
 ## 3. Loop
 
-Keep a decision log: `.factomation/hillclimbs/<id>.tsv`, or `hillclimb-<id>.tsv` without factomation. One row per
+Keep a decision log: `.refactory/hillclimbs/<id>.tsv`, or `hillclimb-<id>.tsv` without refactory. One row per
 attempt:
 
 ```
@@ -66,7 +66,7 @@ Correctness and simplicity outrank the number. Revert a win that makes the code 
 ## 5. Report
 
 - Update the spec: status, final value, date and commit.
-- With factomation: append one `upgrade` entry per kept change to `.factomation/log.md`, and a `session` entry with
+- With refactory: append one `upgrade` entry per kept change to `.refactory/log.md`, and a `session` entry with
   the result. The next report build shows them.
 - Reply with: metric and target, baseline → final with the percent change, attempts (kept and reverted), one line
   per kept change, the log path, and the next idea you would try.

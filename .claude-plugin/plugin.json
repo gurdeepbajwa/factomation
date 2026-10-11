@@ -1,10 +1,10 @@
 {
-  "name": "factomation",
+  "name": "refactory",
   "version": "0.1.0",
   "description": "Turn a codebase into a factory you map, understand and automate one area at a time, plus a keep-or-revert hill climb skill.",
   "author": { "name": "Gurdeep Bajwa" },
-  "homepage": "https://github.com/gurdeepbajwa/factomation",
-  "repository": "https://github.com/gurdeepbajwa/factomation",
+  "homepage": "https://github.com/gurdeepbajwa/refactory",
+  "repository": "https://github.com/gurdeepbajwa/refactory",
   "license": "MIT",
   "keywords": [
     "skills",

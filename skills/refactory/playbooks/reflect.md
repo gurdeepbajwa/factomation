@@ -21,5 +21,5 @@ when you score hotspots".
 
 1. Write the lesson in general terms. Remove every project name, path, person, number and business detail.
 2. Show the user the exact text and ask whether to send it upstream.
-3. Only with a yes: open an issue or pull request on the factomation repository with the lesson as a change to the
+3. Only with a yes: open an issue or pull request on the refactory repository with the lesson as a change to the
    skill, or append it to `LEARNINGS.md` in a pull request.
